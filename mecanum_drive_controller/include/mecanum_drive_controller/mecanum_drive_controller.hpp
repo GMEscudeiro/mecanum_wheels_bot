@@ -28,6 +28,7 @@
 #include "controller_interface/controller_interface.hpp"
 #include "mecanum_drive_controller/odometry.hpp"
 #include "mecanum_drive_controller/speed_limiter.hpp"
+#include "geometry_msgs/msg/twist.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "odometry.hpp"
@@ -111,9 +112,11 @@ protected:
     realtime_odometry_transform_publisher_ = nullptr;
 
   bool subscriber_is_active_ = false;
-  rclcpp::Subscription<TwistStamped>::SharedPtr velocity_command_subscriber_ = nullptr;
+  rclcpp::Subscription<Twist>::SharedPtr velocity_command_subscriber_ = nullptr;
+  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr
+    velocity_command_unstamped_subscriber_ = nullptr;
 
-  realtime_tools::RealtimeBox<std::shared_ptr<TwistStamped>> received_velocity_msg_ptr_{nullptr};
+  realtime_tools::RealtimeBox<std::shared_ptr<Twist>> received_velocity_msg_ptr_{nullptr};
 
   std::queue<TwistStamped> previous_commands_;  // last two commands
 
@@ -135,6 +138,7 @@ protected:
   rclcpp::Time previous_publish_timestamp_{0, 0, RCL_CLOCK_UNINITIALIZED};
 
   bool is_halted = false;
+  bool use_stamped_vel_ = true;
 
   bool reset();
   void halt();
