@@ -1,2 +1,2 @@
-# mecanum_wheels_bot
-Controller for mecanum drive robots
+# Mecanum Wheels Robot
+Robot with mecanum wheels simulation
